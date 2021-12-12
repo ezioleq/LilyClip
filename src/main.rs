@@ -4,6 +4,7 @@ use gtk::prelude::*;
 use gtk::{Application, ApplicationWindow};
 
 mod strings;
+mod ui;
 
 /// Adds a [Popover](gtk::Popover) menu to the header bar's [MenuButton](gtk::MenuButton)
 fn add_header_button_popover(button: &gtk::MenuButton) {
@@ -48,11 +49,7 @@ fn add_header_button_popover(button: &gtk::MenuButton) {
 
 /// Creates a [MenuButton](gtk::MenuButton) for the [header bar](gtk::HeaderBar)
 fn create_header_button() -> gtk::MenuButton {
-    let button = gtk::MenuButton::new();
-    let button_img = gtk::Image::new();
-
-    button_img.set_from_icon_name("open-menu-symbolic".into(), gtk::IconSize::Button);
-    button.set_image(Some(&button_img));
+    let button = ui::create_menu_button_with_icon("open-menu-symbolic");
 
     // Add menu popover
     add_header_button_popover(&button);
@@ -84,21 +81,35 @@ fn build_ui(app: &Application) {
     win.set_titlebar(Some(&header));
 
     // Layout
+    let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
+    
+    let search_bar = gtk::SearchEntry::new();
+    vbox.add(&search_bar);
+    
     let scroll = gtk::ScrolledWindow::new(gtk::NONE_ADJUSTMENT, gtk::NONE_ADJUSTMENT);
     scroll.set_vexpand(true);
-    let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
-
+    
     let listbox = gtk::ListBox::new();
     for i in 1..=50 {
         listbox.add(&gtk::Label::new(Some(format!("Element {}", i).as_str())));
     }
     listbox.show_all();
 
-    let action_bar = gtk::ActionBar::new();
-    action_bar.add(&gtk::Button::with_label("test"));
-    action_bar.add(&gtk::Button::with_label("test2"));
-    action_bar.show_all();
+    let a = gtk::ButtonBox::new(gtk::Orientation::Horizontal);
+    a.set_layout_style(gtk::ButtonBoxStyle::Expand);
+    a.add(&ui::create_button_with_icon("list-add"));
+    a.add(&ui::create_button_with_icon("list-remove"));
 
+    let b = gtk::ButtonBox::new(gtk::Orientation::Horizontal);
+    b.set_layout_style(gtk::ButtonBoxStyle::Expand);
+    b.add(&ui::create_button_with_icon("go-up"));
+    b.add(&ui::create_button_with_icon("go-down"));
+    
+    let action_bar = gtk::ActionBar::new();
+    action_bar.add(&a);
+    action_bar.add(&b);
+
+    action_bar.set_hexpand(true);
 
     scroll.add(&listbox);
     vbox.add(&scroll);
