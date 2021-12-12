@@ -9,11 +9,32 @@ fn add_header_button_popover(button: &gtk::MenuButton) {
     let popover = gtk::Popover::new(Some(button));
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 4);
 
-    let stats = gtk::Button::with_label("Stats");
+    // Stats button
+    let stats = gtk::ModelButton::builder().text("Stats").build();
+
+    // About button
+    let about = gtk::ModelButton::builder().text("About").build();
+    // Show about window
+    about.connect_clicked(|_| {
+        let about = gtk::AboutDialog::builder()
+            .title(strings::TITLE)
+            .version(strings::VERSION)
+            .license_type(gtk::License::Gpl30)
+            .authors(vec!(strings::AUTHOR.into()))
+            .build();
+        
+        about.show_all();
+    });
+
+    // Exit button
+    let close = gtk::ModelButton::builder().text("Close").build();
+    close.connect_clicked(|_| {
+        std::process::exit(0);
+    });
 
     vbox.add(&stats);
-    vbox.add(&gtk::Button::with_label("About"));
-    vbox.add(&gtk::Button::with_label("Close"));
+    vbox.add(&about);
+    vbox.add(&close);
     vbox.show_all();
 
     popover.add(&vbox);
@@ -43,11 +64,6 @@ fn main() {
             gtk::IconSize::Button
         );
         csd_button.set_image(Some(&csd_button_img));
-
-        csd_button.connect_clicked(|_| {
-            let clipboard = gtk::Clipboard::get(&gdk::SELECTION_CLIPBOARD);
-            clipboard.set_text("aaaaaa");
-        });
 
         // Popover for header bar button
         add_header_button_popover(&csd_button);
