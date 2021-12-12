@@ -83,6 +83,28 @@ fn build_ui(app: &Application) {
     header.add(&header_button);
     win.set_titlebar(Some(&header));
 
+    // Layout
+    let scroll = gtk::ScrolledWindow::new(gtk::NONE_ADJUSTMENT, gtk::NONE_ADJUSTMENT);
+    scroll.set_vexpand(true);
+    let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
+
+    let listbox = gtk::ListBox::new();
+    for i in 1..=50 {
+        listbox.add(&gtk::Label::new(Some(format!("Element {}", i).as_str())));
+    }
+    listbox.show_all();
+
+    let action_bar = gtk::ActionBar::new();
+    action_bar.add(&gtk::Button::with_label("test"));
+    action_bar.add(&gtk::Button::with_label("test2"));
+    action_bar.show_all();
+
+
+    scroll.add(&listbox);
+    vbox.add(&scroll);
+    vbox.add(&action_bar);
+    win.add(&vbox);
+
     win.show_all();
 }
 
