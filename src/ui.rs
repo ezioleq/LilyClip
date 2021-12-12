@@ -6,7 +6,7 @@ use crate::strings;
 
 /// Create an [Button](gtk::Button) with an icon of the given name
 pub fn create_button_with_icon(icon_name: &str) -> gtk::Button {
-	gtk::Button::from_icon_name(icon_name.into(), gtk::IconSize::Button)
+    gtk::Button::from_icon_name(icon_name.into(), gtk::IconSize::Button)
 }
 
 /// Create a [MenuButton](gtk::MenuButton) with an icon of the given name
@@ -22,7 +22,7 @@ pub fn create_menu_button_with_icon(icon_name: &str) -> gtk::MenuButton {
 
 /// Show about dialog
 pub fn show_about_dialog(_button: &gtk::ModelButton) {
-	let about = gtk::AboutDialog::builder()
+    let about = gtk::AboutDialog::builder()
         .title(strings::TITLE)
         .version(strings::VERSION)
         .license_type(gtk::License::Gpl30)
