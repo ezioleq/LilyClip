@@ -30,16 +30,7 @@ fn add_header_button_popover(button: &gtk::MenuButton) {
         .build();
 
     // Show about window
-    about.connect_clicked(|_| {
-        let about = gtk::AboutDialog::builder()
-            .title(strings::TITLE)
-            .version(strings::VERSION)
-            .license_type(gtk::License::Gpl30)
-            .authors(vec![strings::AUTHOR.into()])
-            .build();
-
-        about.show_all();
-    });
+    about.connect_clicked(ui::show_about_dialog);
 
     // Exit button
     let close = gtk::ModelButton::builder()
@@ -68,16 +59,6 @@ fn add_header_button_popover(button: &gtk::MenuButton) {
     button.set_popover(Some(&popover));
 }
 
-/// Creates a [MenuButton](gtk::MenuButton) for the [header bar](gtk::HeaderBar)
-fn create_header_button() -> gtk::MenuButton {
-    let button = ui::create_menu_button_with_icon("open-menu-symbolic");
-
-    // Add menu popover
-    add_header_button_popover(&button);
-
-    button
-}
-
 /// Builds UI elements
 fn build_ui(app: &Application) {
     let win = ApplicationWindow::builder()
@@ -87,7 +68,9 @@ fn build_ui(app: &Application) {
         .title(strings::TITLE)
         .build();
 
-    let header_button = create_header_button();
+    // Header bar's button
+    let header_button = ui::create_menu_button_with_icon("open-menu-symbolic");
+    add_header_button_popover(&header_button);
 
     // CSD header bar
     let header = gtk::HeaderBar::builder()
