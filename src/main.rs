@@ -12,10 +12,23 @@ fn add_header_button_popover(button: &gtk::MenuButton) {
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 4);
 
     // Stats button
-    let stats = gtk::ModelButton::builder().text("Stats").build();
+    let stats = gtk::ModelButton::builder()
+        .label("Stats")
+        .image(&gtk::Image::from_icon_name(
+            "document-properties".into(),
+            gtk::IconSize::Button,
+        ))
+        .build();
 
     // About button
-    let about = gtk::ModelButton::builder().text("About").build();
+    let about = gtk::ModelButton::builder()
+        .label("About")
+        .image(&gtk::Image::from_icon_name(
+            "help-about".into(),
+            gtk::IconSize::Button,
+        ))
+        .build();
+
     // Show about window
     about.connect_clicked(|_| {
         let about = gtk::AboutDialog::builder()
@@ -29,7 +42,15 @@ fn add_header_button_popover(button: &gtk::MenuButton) {
     });
 
     // Exit button
-    let close = gtk::ModelButton::builder().text("Close").build();
+    let close = gtk::ModelButton::builder()
+        .label("Close")
+        .image(&gtk::Image::from_icon_name(
+            "window-close".into(),
+            gtk::IconSize::Button,
+        ))
+        .build();
+
+    // Exit button clicked
     close.connect_clicked(|_| {
         std::process::exit(0);
     });
