@@ -82,34 +82,37 @@ fn build_ui(app: &Application) {
 
     // Layout
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 0);
-    
+
     let search_bar = gtk::SearchEntry::new();
     vbox.add(&search_bar);
-    
+
     let scroll = gtk::ScrolledWindow::new(gtk::NONE_ADJUSTMENT, gtk::NONE_ADJUSTMENT);
     scroll.set_vexpand(true);
-    
+
     let listbox = gtk::ListBox::new();
     for i in 1..=50 {
         listbox.add(&gtk::Label::new(Some(format!("Element {}", i).as_str())));
     }
     listbox.show_all();
 
-    let a = gtk::ButtonBox::new(gtk::Orientation::Horizontal);
-    a.set_layout_style(gtk::ButtonBoxStyle::Expand);
-    a.add(&ui::create_button_with_icon("list-add"));
-    a.add(&ui::create_button_with_icon("list-remove"));
+    let man_box = gtk::ButtonBox::new(gtk::Orientation::Horizontal);
+    man_box.set_layout_style(gtk::ButtonBoxStyle::Expand);
+    man_box.add(&ui::create_button_with_icon("list-add"));
+    man_box.add(&ui::create_button_with_icon("list-remove"));
 
-    let b = gtk::ButtonBox::new(gtk::Orientation::Horizontal);
-    b.set_layout_style(gtk::ButtonBoxStyle::Expand);
-    b.add(&ui::create_button_with_icon("go-up"));
-    b.add(&ui::create_button_with_icon("go-down"));
-    
+    let move_box = gtk::ButtonBox::new(gtk::Orientation::Horizontal);
+    move_box.set_layout_style(gtk::ButtonBoxStyle::Expand);
+    move_box.add(&ui::create_button_with_icon("go-up"));
+    move_box.add(&ui::create_button_with_icon("go-down"));
+
+    let separator = gtk::Separator::new(gtk::Orientation::Horizontal);
+    separator.set_hexpand(true);
+
     let action_bar = gtk::ActionBar::new();
-    action_bar.add(&a);
-    action_bar.add(&b);
-
-    action_bar.set_hexpand(true);
+    action_bar.add(&man_box);
+    action_bar.add(&move_box);
+    action_bar.add(&separator);
+    action_bar.add(&ui::create_button_with_icon("edit-copy"));
 
     scroll.add(&listbox);
     vbox.add(&scroll);
