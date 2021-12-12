@@ -5,6 +5,7 @@ use gtk::{Application, ApplicationWindow};
 
 mod strings;
 
+/// Adds a [Popover](gtk::Popover) menu to the header bar's [MenuButton](gtk::MenuButton)
 fn add_header_button_popover(button: &gtk::MenuButton) {
     let popover = gtk::Popover::new(Some(button));
     let vbox = gtk::Box::new(gtk::Orientation::Vertical, 4);
@@ -32,6 +33,7 @@ fn add_header_button_popover(button: &gtk::MenuButton) {
         std::process::exit(0);
     });
 
+    // Add those buttons to the vertical box layout
     vbox.add(&stats);
     vbox.add(&about);
     vbox.add(&close);
@@ -40,9 +42,25 @@ fn add_header_button_popover(button: &gtk::MenuButton) {
     popover.add(&vbox);
     popover.set_position(gtk::PositionType::Bottom);
 
+    // Set button's popover
     button.set_popover(Some(&popover));
 }
 
+/// Creates a [MenuButton](gtk::MenuButton) for the [header bar](gtk::HeaderBar)
+fn create_header_button() -> gtk::MenuButton {
+    let button = gtk::MenuButton::new();
+    let button_img = gtk::Image::new();
+
+    button_img.set_from_icon_name("open-menu-symbolic".into(), gtk::IconSize::Button);
+    button.set_image(Some(&button_img));
+
+    // Add menu popover
+    add_header_button_popover(&button);
+
+    button
+}
+
+/// Builds UI elements
 fn build_ui(app: &Application) {
     let win = ApplicationWindow::builder()
         .application(app)
@@ -51,14 +69,7 @@ fn build_ui(app: &Application) {
         .title(strings::TITLE)
         .build();
 
-    // Header bar button for misc options
-    let csd_button = gtk::MenuButton::new();
-    let csd_button_img = gtk::Image::new();
-    csd_button_img.set_from_icon_name("open-menu-symbolic".into(), gtk::IconSize::Button);
-    csd_button.set_image(Some(&csd_button_img));
-
-    // Popover for header bar button
-    add_header_button_popover(&csd_button);
+    let header_button = create_header_button();
 
     // CSD header bar
     let header = gtk::HeaderBar::builder()
@@ -69,12 +80,13 @@ fn build_ui(app: &Application) {
         .build();
 
     // Add and set the new titlebar
-    header.add(&csd_button);
+    header.add(&header_button);
     win.set_titlebar(Some(&header));
 
     win.show_all();
 }
 
+/// Program entry point
 fn main() {
     let app = Application::builder()
         .application_id("com.ezioleq.LilyClip")
