@@ -5,6 +5,7 @@ use gtk::{Application, ApplicationWindow};
 
 mod strings;
 mod ui;
+mod data;
 
 /// Adds a [Popover](gtk::Popover) menu to the header bar's [MenuButton](gtk::MenuButton)
 fn add_header_button_popover(button: &gtk::MenuButton) {
