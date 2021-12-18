@@ -5,7 +5,7 @@ use gtk::{Application, ApplicationWindow};
 
 mod strings;
 mod ui;
-mod data;
+mod program_data;
 
 /// Adds a [Popover](gtk::Popover) menu to the header bar's [MenuButton](gtk::MenuButton)
 fn add_header_button_popover(button: &gtk::MenuButton) {
@@ -95,9 +95,13 @@ fn build_ui(app: &Application) {
     scroll.set_vexpand(true);
 
     let listbox = gtk::ListBox::new();
-    for i in 1..=50 {
-        listbox.add(&gtk::Label::new(Some(format!("Element {}", i).as_str())));
+    
+    // Testing program data
+    let data: program_data::ProgramData = program_data::ProgramData::new();
+    for line in data.get_saved_lines("saved") {
+        listbox.add(&gtk::Label::new(Some(&line)));
     }
+    
     listbox.show_all();
 
     let man_box = gtk::ButtonBox::new(gtk::Orientation::Horizontal);
